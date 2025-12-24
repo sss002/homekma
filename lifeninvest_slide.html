@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 전략적 인생 및 투자 로드맵 슬라이드</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5', // Indigo 600
+                        secondary: '#10b981', // Emerald 500
+                        darkBg: '#111827', // Gray 900
+                        darkCard: '#1f2937', // Gray 800
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Typography Requirements */
+        :root {
+            --title-size: 32px; /* Approx 24pt */
+            --content-size: 22.6px; /* Approx 17pt */
+        }
+
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            overflow: hidden; /* Slide functionality */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Slide Layout */
+        .slide-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            scroll-snap-align: start;
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            padding: 4rem 6rem;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        /* Font Sizes Enforcement */
+        .slide-title {
+            font-size: var(--title-size);
+            line-height: 1.3;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .slide-content {
+            font-size: var(--content-size);
+            line-height: 1.6;
+        }
+        .slide-text-small {
+            font-size: 1rem; /* For auxiliary text like legends */
+        }
+
+        /* Scrollbar Hiding */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom Scrollbar for Text Areas */
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+        .dark .custom-scroll::-webkit-scrollbar-thumb { background-color: #4b5563; }
+
+        /* Animation */
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-darkBg dark:text-gray-100">
+
+    <!-- Header / Navigation -->
+    <header class="fixed top-0 left-0 w-full z-50 px-8 py-4 flex justify-between items-center bg-white/80 dark:bg-darkBg/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-layer-group text-2xl text-primary"></i>
+            <h1 class="font-bold text-xl">Strategic Roadmap 2026</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-sm font-medium opacity-60">F11 전체화면 권장</span>
+            <!-- Interactive 1: Theme Toggle -->
+            <button id="theme-toggle" class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-300 transition focus:outline-none">
+                <i id="theme-icon" class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Side Navigation Dots (Interactive 2) -->
+    <nav class="fixed right-6 top-1/2 transform -translate-y-1/2 z-40 flex flex-col gap-3">
+        <button onclick="scrollToSlide(0)" class="nav-dot w-3 h-3 rounded-full bg-gray-400 hover:bg-primary transition"></button>
+        <button onclick="scrollToSlide(1)" class="nav-dot w-3 h-3 rounded-full bg-gray-400 hover:bg-primary transition"></button>
+        <button onclick="scrollToSlide(2)" class="nav-dot w-3 h-3 rounded-full bg-gray-400 hover:bg-primary transition"></button>
+        <button onclick="scrollToSlide(3)" class="nav-dot w-3 h-3 rounded-full bg-gray-400 hover:bg-primary transition"></button>
+        <button onclick="scrollToSlide(4)" class="nav-dot w-3 h-3 rounded-full bg-gray-400 hover:bg-primary transition"></button>
+    </nav>
+
+    <!-- Main Slides Container -->
+    <div class="slide-container no-scrollbar" id="main-container">
+
+        <!-- ================= SLIDE 1: 자기 탐색 및 가치 ================= -->
+        <section class="slide bg-white dark:bg-darkBg">
+            <div class="fade-in h-full flex flex-col">
+                <h2 class="slide-title text-primary border-l-8 border-primary pl-4">01. 자기 탐색 및 핵심 가치 포트폴리오</h2>
+                
+                <div class="grid grid-cols-12 gap-8 flex-1 min-h-0">
+                    <!-- Left: Visualization -->
+                    <div class="col-span-5 flex flex-col justify-center bg-gray-100 dark:bg-darkCard rounded-2xl p-6 shadow-lg">
+                        <h3 class="text-xl font-bold mb-4 text-center">삶의 영역 중요도/만족도 분석</h3>
+                        <div class="relative h-64 w-full">
+                            <canvas id="chartLifeMatrix"></canvas>
+                        </div>
+                        <p class="mt-4 text-center text-sm text-gray-500">
+                            * 우측 하단(중요도 高, 만족도 低)이 긴급 개선 영역
+                        </p>
+                    </div>
+
+                    <!-- Right: Content & Detailed Text -->
+                    <div class="col-span-7 flex flex-col overflow-hidden">
+                        <div class="slide-content mb-6">
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li><strong>자기 이해:</strong> 지난 5년간의 선택 패턴을 분석하여 본질적 욕망 파악.</li>
+                                <li><strong>핵심 가치:</strong> 자유, 안정, 성취 등 삶을 관통하는 3가지 키워드 도출.</li>
+                                <li><strong>비전 선언:</strong> "교육을 통해 잠재력을 이끌어내는 리더"와 같은 구체적 문장.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Interactive 3: Expandable Long Text (Accordion) -->
+                        <div class="flex-1 bg-blue-50 dark:bg-gray-800 rounded-xl p-6 overflow-hidden flex flex-col relative border border-blue-100 dark:border-gray-600">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-bold text-lg text-blue-800 dark:text-blue-300"><i class="fa-solid fa-book-open mr-2"></i>상세 해설 (500자 이상)</h4>
+                                <button onclick="toggleText('text-slide-1', this)" class="text-sm bg-blue-200 dark:bg-gray-600 px-3 py-1 rounded hover:bg-blue-300 transition">
+                                    펼치기 <i class="fa-solid fa-chevron-down ml-1"></i>
+                                </button>
+                            </div>
+                            <div id="text-slide-1" class="custom-scroll overflow-y-auto pr-2 text-base leading-relaxed text-gray-600 dark:text-gray-300 transition-all duration-500 max-h-32 opacity-80">
+                                <p>
+                                    인생 로드맵 설계의 첫 단추는 철저한 자기 객관화에서 시작됩니다. MBTI나 강점 혁명 같은 도구는 단순한 흥미 위주가 아니라, 내가 어떤 환경에서 최고의 성과를 내고 어떤 상황에서 스트레스를 받는지 분석하는 데이터로 활용되어야 합니다. 특히 지난 5년 동안의 이직, 소비, 인간관계에서의 주요 의사결정 패턴을 복기해 보면, 내가 무의식적으로 추구해온 '핵심 가치'가 드러납니다.<br><br>
+                                    예를 들어, 연봉이 높은 직장보다 워라밸이 보장되는 직장을 선택했다면 당신의 핵심 가치는 '성취'보다 '균형'과 '가족'일 수 있습니다. 이러한 핵심 가치는 인생의 나침반 역할을 하며, 향후 딜레마 상황에서 빠른 의사결정을 돕는 기준이 됩니다. 단순히 "부자가 되고 싶다"는 막연한 바람은 비전이 될 수 없습니다. 비전은 "경제적 자유를 달성하여 매년 2회 해외에서 봉사활동을 하며 타인의 성장을 돕는 삶"처럼 구체적인 장면(Scene)으로 묘사되어야 합니다.<br><br>
+                                    사명 선언문은 내가 이 세상에 다녀감으로써 남기고 싶은 유산에 대한 정의입니다. 자신의 장례식을 상상하며 묘비명을 써보는 역산의 기술을 활용하면, 현재의 불필요한 고민을 걷어내고 본질에 집중할 수 있게 됩니다. 자기 탐색이 선행되지 않은 목표 설정은 기초 공사 없는 고층 빌딩과 같아서, 작은 시련에도 쉽게 무너질 수 있음을 명심해야 합니다. 이 과정은 최소 1주일 이상의 숙고 기간을 거쳐 완성되어야 하는 로드맵의 핵심 기초 단계입니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 2: SMART 목표 & 만다라트 ================= -->
+        <section class="slide bg-gray-50 dark:bg-darkCard">
+            <div class="fade-in h-full flex flex-col">
+                <h2 class="slide-title text-secondary border-l-8 border-secondary pl-4">02. 목표 설정과 만다라트 시스템</h2>
+
+                <!-- Interactive 5: Tabs Interface -->
+                <div class="flex gap-4 mb-4 border-b border-gray-300 dark:border-gray-600">
+                    <button onclick="switchTab('smart')" id="tab-btn-smart" class="pb-2 text-xl font-bold border-b-4 border-secondary text-secondary transition">SMART 원칙</button>
+                    <button onclick="switchTab('mandal')" id="tab-btn-mandal" class="pb-2 text-xl font-bold text-gray-400 hover:text-gray-600 transition">만다라트 차트</button>
+                </div>
+
+                <div class="flex-1 min-h-0 grid grid-cols-12 gap-8 pt-4">
+                    <!-- Tab Content: SMART -->
+                    <div id="content-smart" class="col-span-12 grid grid-cols-12 gap-8">
+                        <div class="col-span-5 grid grid-cols-1 gap-4">
+                            <!-- Visual Cards -->
+                            <div class="bg-white dark:bg-darkBg p-4 rounded-lg shadow border-l-4 border-blue-500">
+                                <strong class="text-xl block">Specific (구체성)</strong>
+                                <span class="text-gray-500">"살 빼기" (X) -> "체지방 5kg 감량" (O)</span>
+                            </div>
+                            <div class="bg-white dark:bg-darkBg p-4 rounded-lg shadow border-l-4 border-green-500">
+                                <strong class="text-xl block">Measurable (측정 가능)</strong>
+                                <span class="text-gray-500">숫자로 측정할 수 없는 목표는 관리가 불가능하다.</span>
+                            </div>
+                            <div class="bg-white dark:bg-darkBg p-4 rounded-lg shadow border-l-4 border-red-500">
+                                <strong class="text-xl block">Time-bound (기한)</strong>
+                                <span class="text-gray-500">마감일이 없는 목표는 단지 꿈에 불과하다.</span>
+                            </div>
+                        </div>
+                        <div class="col-span-7 bg-green-50 dark:bg-gray-800 p-6 rounded-xl overflow-hidden flex flex-col">
+                            <h4 class="font-bold text-lg mb-2 text-green-800 dark:text-green-300">목표 관리 상세 전략</h4>
+                             <div class="custom-scroll overflow-y-auto pr-2 slide-content text-base">
+                                <p>
+                                    SMART 원칙은 추상적인 소망을 실행 가능한 계획으로 변환하는 가장 강력한 프레임워크입니다. 많은 사람들이 새해 계획에 실패하는 이유는 의지력이 부족해서가 아니라, 목표가 모호하기 때문입니다. 뇌는 구체적인 지시사항이 있을 때만 작동합니다. 따라서 '영어 잘하기'가 아니라 'OPIc AL 등급 11월 30일까지 취득'과 같이 명확해야 합니다.<br><br>
+                                    목표는 장기(10년), 중기(3년), 단기(1년)로 계층화되어야 합니다. 장기 목표가 북극성이라면, 단기 목표는 발밑을 비추는 손전등입니다. 상위 목표와 하위 목표가 논리적으로 연결(Alignment)되어 있는지 점검하는 것이 중요합니다. 예를 들어, '건강한 노후'라는 장기 목표가 있다면 오늘의 '스쿼트 50회'는 그 목표를 위한 아주 작은 벽돌 한 장이 됩니다.<br><br>
+                                    또한, 목표 달성 과정에서 실패했을 때를 대비한 'If-Then' 플랜을 세워야 합니다. "비가 와서 조깅을 못 한다면(If), 집에서 실내 자전거를 30분 탄다(Then)"와 같은 대안이 준비되어 있어야 루틴이 끊기지 않습니다. 기록은 기억을 이깁니다. 매일의 성과를 시각적으로 기록하고, 작은 성공(Small Win)을 축하하는 보상 체계를 마련하는 것이 지속 가능한 목표 달성의 핵심 비결입니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Mandalart (Hidden by default) -->
+                    <div id="content-mandal" class="hidden col-span-12 grid grid-cols-12 gap-8">
+                        <div class="col-span-6 flex items-center justify-center">
+                            <!-- Simple Mandalart CSS Grid -->
+                            <div class="grid grid-cols-3 gap-2 w-full max-w-md aspect-square">
+                                <div class="bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-2 text-center rounded">건강</div>
+                                <div class="bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-2 text-center rounded">재무</div>
+                                <div class="bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-2 text-center rounded">취미</div>
+                                <div class="bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-2 text-center rounded">커리어</div>
+                                <div class="bg-secondary text-white font-bold flex items-center justify-center p-2 text-center rounded shadow-lg transform scale-110 z-10">핵심<br>목표</div>
+                                <div class="bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-2 text-center rounded">관계</div>
+                                <div class="bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-2 text-center rounded">학습</div>
+                                <div class="bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-2 text-center rounded">봉사</div>
+                                <div class="bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-2 text-center rounded">멘탈</div>
+                            </div>
+                        </div>
+                        <div class="col-span-6 flex flex-col justify-center slide-content">
+                            <h3 class="font-bold text-2xl mb-4">만다라트(Mandal-Art) 기법</h3>
+                            <p class="mb-4">
+                                오타니 쇼헤이의 성공 비결로 알려진 만다라트는 하나의 핵심 목표를 달성하기 위해 8개의 하위 목표를 세우고, 다시 각 하위 목표당 8개의 구체적 실행 방안을 도출하여 총 64개의 행동 계획을 만드는 확장형 사고 도구입니다.
+                            </p>
+                            <p class="text-gray-500 text-base">
+                                * 왼쪽 그리드는 중앙 핵심 목표를 둘러싼 1차 하위 목표 예시입니다. 균형 잡힌 삶을 위해 각 영역을 골고루 배치하세요.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 3: 재무 설계 (Calculator) ================= -->
+        <section class="slide bg-white dark:bg-darkBg">
+            <div class="fade-in h-full flex flex-col">
+                <h2 class="slide-title text-gray-800 dark:text-white border-l-8 border-gray-600 pl-4">03. 생애 주기별 재무 설계 및 자산 배분</h2>
+
+                <div class="grid grid-cols-12 gap-8 flex-1 min-h-0">
+                    <!-- Interactive 4: Input Calculator -->
+                    <div class="col-span-4 bg-gray-100 dark:bg-darkCard p-6 rounded-2xl shadow-inner flex flex-col">
+                        <h3 class="text-xl font-bold mb-4"><i class="fa-solid fa-calculator mr-2"></i>100-나이 법칙 시뮬레이터</h3>
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium mb-2">현재 나이를 입력하세요:</label>
+                            <input type="number" id="ageInput" value="30" min="1" max="100" class="w-full p-3 rounded border border-gray-300 dark:bg-gray-700 dark:border-gray-600 text-lg font-bold text-primary focus:outline-none focus:ring-2 focus:ring-primary" oninput="updateFinanceChart()">
+                        </div>
+                        <div class="bg-white dark:bg-darkBg p-4 rounded-xl mb-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-bold text-blue-600">투자자산 (주식 등)</span>
+                                <span id="investPercent" class="font-bold">70%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                <div id="investBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-darkBg p-4 rounded-xl">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-bold text-green-600">안전자산 (채권/예금)</span>
+                                <span id="safePercent" class="font-bold">30%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                <div id="safeBar" class="bg-green-600 h-2.5 rounded-full" style="width: 30%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Interactive 8: Checklist Progress -->
+                        <div class="mt-8">
+                            <h4 class="font-bold text-lg mb-2">재무 건전성 체크리스트</h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox text-primary h-5 w-5" onchange="updateChecklist()">
+                                    <span>비상금 (생활비 3개월치) 확보</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox text-primary h-5 w-5" onchange="updateChecklist()">
+                                    <span>연금저축 월 소득 10% 납입</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox text-primary h-5 w-5" onchange="updateChecklist()">
+                                    <span>보장성 보험료 소득 8% 이내</span>
+                                </label>
+                            </div>
+                            <div class="mt-2 text-sm text-right text-gray-500" id="checklist-status">0/3 완료</div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Text Content -->
+                    <div class="col-span-8 flex flex-col">
+                        <div class="bg-yellow-50 dark:bg-gray-800 p-6 rounded-xl h-full overflow-hidden flex flex-col border border-yellow-200 dark:border-gray-600">
+                             <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-bold text-lg text-yellow-800 dark:text-yellow-300">재무 설계 및 통장 쪼개기 전략</h4>
+                            </div>
+                            <div class="custom-scroll overflow-y-auto pr-2 slide-content text-gray-700 dark:text-gray-300 leading-relaxed">
+                                <p>
+                                    사회초년생부터 은퇴기까지 이어지는 재무 설계의 핵심은 '시간'을 내 편으로 만드는 것입니다. 복리 효과는 초기 자본보다 투자 기간에 비례하여 기하급수적으로 커지기 때문입니다. '100-나이 법칙'은 나이가 들수록 위험 자산(주식)의 비중을 줄이고 안전 자산(채권)을 늘려야 한다는 고전적이지만 강력한 자산 배분 원칙입니다. 젊을 때는 인적 자본(노동 소득)이 충분하므로 금융 자산의 변동성을 감내하며 높은 기대 수익률을 추구해야 합니다.<br><br>
+                                    가장 실천적인 첫걸음은 '통장 쪼개기'입니다. 급여 통장, 저축 통장, 생활비 통장, 비상금 통장(CMA) 등 4개의 통장을 만들어 돈의 꼬리표를 붙여야 합니다. 특히 비상금 통장은 갑작스러운 사고나 실직 시 투자를 중단하지 않게 해주는 '재무적 에어백' 역할을 합니다. 수입이 들어오면 먼저 저축과 투자를 자동이체로 빠져나가게 하고(선저축), 남은 돈으로 생활하는(후소비) 습관이 부를 축적하는 유일한 길입니다.<br><br>
+                                    또한, 연금저축펀드와 IRP는 세액공제 혜택(최대 16.5%)을 받으며 노후를 준비할 수 있는 필수 계좌입니다. 보험은 투자가 아닌 비용으로 인식하여, 실손보험 등 꼭 필요한 보장 위주로 소득의 5~10%를 넘지 않도록 설계해야 합니다. 투자의 제1원칙은 '원금을 잃지 않는 것'이며, 이를 위해 분산 투자와 정기적인 리밸런싱을 통해 포트폴리오의 위험을 관리해야 합니다. 돈을 버는 것보다 지키고 불리는 시스템을 구축하는 것이 진정한 경제적 자유로 가는 지름길입니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 4: 2026 시장 전망 (Chart) ================= -->
+        <section class="slide bg-gray-50 dark:bg-darkCard">
+            <div class="fade-in h-full flex flex-col">
+                <h2 class="slide-title text-red-600 dark:text-red-400 border-l-8 border-red-500 pl-4">04. 2026년 주식시장 전망: 준골디락스</h2>
+
+                <div class="grid grid-cols-12 gap-8 flex-1 min-h-0">
+                    <!-- Chart Area -->
+                    <div class="col-span-8 bg-white dark:bg-darkBg rounded-2xl shadow p-6 flex flex-col">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-xl">KOSPI 시나리오별 Target Band</h3>
+                            <span class="text-sm bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">단위: Pt</span>
+                        </div>
+                        <div class="flex-1 relative w-full h-full">
+                            <canvas id="marketChart"></canvas>
+                        </div>
+                        <p class="text-center mt-2 text-gray-500 slide-text-small">
+                            * 차트 범례를 클릭하여 시나리오별 데이터를 켜고 끌 수 있습니다. (Interactive)
+                        </p>
+                    </div>
+
+                    <!-- Side Text -->
+                    <div class="col-span-4 flex flex-col gap-4">
+                        <div class="bg-red-50 dark:bg-gray-800 p-5 rounded-xl border border-red-100 dark:border-gray-600 flex-1 overflow-hidden flex flex-col">
+                            <h4 class="font-bold text-lg text-red-800 dark:text-red-300 mb-2">Macro & Market Outlook</h4>
+                            <div class="custom-scroll overflow-y-auto pr-2 slide-content text-base">
+                                <p>
+                                    2026년 글로벌 증시는 '준골디락스(Quasi-Goldilocks)' 환경에 진입할 전망입니다. 물가는 중앙은행의 목표치에 근접하며 하향 안정화되고, 경제 성장은 잠재 성장률을 상회하는 이상적인 국면입니다. 특히 연준(Fed)의 '슬로우 이징(Slow Easing)' 정책은 급격한 금리 인하로 인한 인플레이션 재발을 막으면서도 경기 침체를 방어하는 완벽한 균형을 유지할 것입니다.<br><br>
+                                    한국 증시(KOSPI)는 삼성전자를 필두로 한 반도체 이익 레벨업과 정부의 밸류업 프로그램(상법 개정, 자사주 소각 의무화)이 맞물려 박스권을 돌파할 것입니다. Base 시나리오 기준 4,980~5,410pt 도달이 예상되며, 이는 반도체 슈퍼 사이클과 AI 투자가 실질적인 기업 이익(EPS) 증가로 연결되기 때문입니다.<br><br>
+                                    리스크 요인으로는 지정학적 갈등에 따른 공급망 교란과 미국 대선 이후의 정책 불확실성이 존재합니다. 하지만 AI 기술이 주도하는 생산성 혁신은 과거 닷컴 버블과 달리 강력한 현금 흐름을 동반하고 있어 거품 붕괴 가능성은 낮습니다. 지금은 공포보다 탐욕을 가져야 할 시기이며, 조정 시마다 주식 비중을 확대하는 전략이 유효합니다.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Key Stats Box -->
+                        <div class="bg-white dark:bg-darkBg p-4 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-gray-500">예상 영업이익</span>
+                                <span class="text-2xl font-bold text-primary">345조원 <span class="text-sm text-green-500">▲24.8%</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 5: 투자 전략 & Top Picks ================= -->
+        <section class="slide bg-white dark:bg-darkBg">
+            <div class="fade-in h-full flex flex-col">
+                <h2 class="slide-title text-purple-600 dark:text-purple-400 border-l-8 border-purple-500 pl-4">05. 유망 업종 및 자산 배분 전략</h2>
+
+                <!-- Interactive 6: Filter Buttons -->
+                <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+                    <button onclick="filterPicks('all')" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-purple-600 hover:text-white transition font-bold text-lg focus:outline-none focus:ring-2 focus:ring-purple-400">All</button>
+                    <button onclick="filterPicks('semi')" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-blue-600 hover:text-white transition font-bold text-lg">반도체/AI</button>
+                    <button onclick="filterPicks('heavy')" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-yellow-600 hover:text-white transition font-bold text-lg">중공업/전력</button>
+                    <button onclick="filterPicks('bio')" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-green-600 hover:text-white transition font-bold text-lg">바이오/헬스</button>
+                    <button onclick="filterPicks('dividend')" class="px-5 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-red-500 hover:text-white transition font-bold text-lg">배당/인컴</button>
+                </div>
+
+                <div class="grid grid-cols-12 gap-8 flex-1 min-h-0">
+                    <!-- Left: Pick Cards Grid -->
+                    <div class="col-span-7 overflow-y-auto custom-scroll pr-2 grid grid-cols-2 gap-4 auto-rows-min" id="picks-container">
+                        <!-- Cards injected via JS or Static -->
+                        <div class="pick-card semi bg-blue-50 dark:bg-darkCard p-5 rounded-xl border-l-4 border-blue-500 hover:shadow-lg transition cursor-pointer">
+                            <h4 class="font-bold text-xl mb-1">삼성전자 / SK하이닉스</h4>
+                            <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">반도체</span>
+                            <p class="mt-2 text-gray-600 dark:text-gray-400">HBM 리더십 및 메모리 슈퍼 사이클 수혜</p>
+                        </div>
+                        <div class="pick-card heavy bg-yellow-50 dark:bg-darkCard p-5 rounded-xl border-l-4 border-yellow-500 hover:shadow-lg transition cursor-pointer">
+                            <h4 class="font-bold text-xl mb-1">HD한국조선 / LS Electric</h4>
+                            <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded">인프라</span>
+                            <p class="mt-2 text-gray-600 dark:text-gray-400">미국 전력망 교체 수요 및 선박 수주 호조</p>
+                        </div>
+                        <div class="pick-card bio bg-green-50 dark:bg-darkCard p-5 rounded-xl border-l-4 border-green-500 hover:shadow-lg transition cursor-pointer">
+                            <h4 class="font-bold text-xl mb-1">삼성바이오로직스</h4>
+                            <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">바이오</span>
+                            <p class="mt-2 text-gray-600 dark:text-gray-400">CDMO 5공장 가동 및 금리 인하 수혜</p>
+                        </div>
+                        <div class="pick-card dividend bg-red-50 dark:bg-darkCard p-5 rounded-xl border-l-4 border-red-500 hover:shadow-lg transition cursor-pointer">
+                            <h4 class="font-bold text-xl mb-1">SCHD / JEPI (ETF)</h4>
+                            <span class="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">배당성장</span>
+                            <p class="mt-2 text-gray-600 dark:text-gray-400">현금 흐름 확보 및 변동성 방어 (Target Yld 4~8%)</p>
+                        </div>
+                        <!-- More cards... -->
+                         <div class="pick-card semi bg-blue-50 dark:bg-darkCard p-5 rounded-xl border-l-4 border-blue-500 hover:shadow-lg transition cursor-pointer">
+                            <h4 class="font-bold text-xl mb-1">NVIDIA / Microsoft</h4>
+                            <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">US Tech</span>
+                            <p class="mt-2 text-gray-600 dark:text-gray-400">AI Capex 확대의 직접적 수혜 및 생태계 장악</p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Strategy Text -->
+                    <div class="col-span-5 bg-purple-50 dark:bg-gray-800 p-6 rounded-xl flex flex-col overflow-hidden border border-purple-100 dark:border-gray-600">
+                        <h4 class="font-bold text-lg mb-2 text-purple-800 dark:text-purple-300">포트폴리오 운용 전략</h4>
+                        <div class="custom-scroll overflow-y-auto pr-2 slide-content text-base leading-relaxed">
+                            <p>
+                                2026년 포트폴리오의 핵심은 '성장(Growth)'과 '인컴(Income)'의 바벨 전략입니다. 한쪽 바구니에는 AI 반도체와 전력 인프라 등 확실한 성장이 담보된 주도주를 담고, 다른 쪽에는 매월 배당이 들어오는 SCHD, 리츠, 채권을 담아 변동성을 제어해야 합니다.<br><br>
+                                특히 한국 시장에서는 '밸류업 지수' 편입 종목에 주목해야 합니다. 거버넌스 개혁 의지가 확인된 지주회사와 금융주는 저PBR 매력과 배당 성향 확대로 재평가될 것입니다. 반면, 중국 소비재나 단순 제조 하청 업체는 경쟁 심화로 인한 마진 압박이 지속될 수 있으므로 비중 축소를 권고합니다.<br><br>
+                                매매 타이밍보다는 보유 기간이 중요합니다. 시장의 소음(Noise)에 흔들리지 않고 우량 자산을 꾸준히 모아가는 적립식 투자가 개인 투자자에게 가장 유리합니다. 주식 비중이 목표치를 20% 이상 초과하면 일부 매도하여 안전 자산을 채우는 '리밸런싱' 원칙만 지킨다면, 2026년은 자산 점프업의 최고의 해가 될 것입니다. 마지막으로, 달러 자산(미국 주식)을 40% 이상 유지하여 원화 가치 하락에 대한 자연스러운 헤지(Hedge) 효과를 누리시기 바랍니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Help Modal (Interactive 9 & 10) -->
+    <button onclick="toggleModal()" class="fixed bottom-6 right-6 bg-gray-800 dark:bg-white text-white dark:text-gray-900 w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition z-50" title="도움말">
+        <i class="fa-solid fa-question text-xl"></i>
+    </button>
+
+    <div id="help-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center fade-in">
+        <div class="bg-white dark:bg-darkCard p-8 rounded-2xl max-w-lg shadow-2xl relative">
+            <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-red-500"><i class="fa-solid fa-times text-2xl"></i></button>
+            <h3 class="text-2xl font-bold mb-4">대시보드 사용 가이드</h3>
+            <ul class="list-disc pl-5 space-y-2 text-lg">
+                <li><strong>화면 이동:</strong> 키보드 방향키(↑/↓) 또는 우측 점을 이용하세요.</li>
+                <li><strong>테마 변경:</strong> 우측 상단의 달/해 아이콘을 클릭하세요.</li>
+                <li><strong>텍스트 확장:</strong> '상세 해설 펼치기' 버튼으로 전체 내용을 확인하세요.</li>
+                <li><strong>계산기:</strong> Slide 3에서 나이를 입력해 자산 배분을 시뮬레이션하세요.</li>
+                <li><strong>필터링:</strong> Slide 5에서 버튼을 눌러 관심 업종만 확인하세요.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Dark Mode Logic ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if(html.classList.contains('dark')){
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                // Update Charts for Dark Mode
+                updateChartsTheme(true);
+            } else {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                updateChartsTheme(false);
+            }
+        });
+
+        // --- 2. Accordion Logic (Expand Text) ---
+        function toggleText(targetId, btn) {
+            const el = document.getElementById(targetId);
+            if (el.style.maxHeight === 'none') {
+                el.style.maxHeight = '8rem'; // Default height
+                el.style.opacity = '0.8';
+                btn.innerHTML = '펼치기 <i class="fa-solid fa-chevron-down ml-1"></i>';
+            } else {
+                el.style.maxHeight = 'none'; // Expanded
+                el.style.opacity = '1';
+                btn.innerHTML = '접기 <i class="fa-solid fa-chevron-up ml-1"></i>';
+            }
+        }
+
+        // --- 3. Slide Navigation Logic ---
+        const container = document.getElementById('main-container');
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.nav-dot');
+
+        function scrollToSlide(index) {
+            slides[index].scrollIntoView({ behavior: 'smooth' });
+            updateDots(index);
+        }
+
+        function updateDots(index) {
+            dots.forEach(d => d.classList.remove('bg-primary', 'scale-125'));
+            dots[index].classList.add('bg-primary', 'scale-125');
+        }
+
+        // Detect scroll position
+        container.addEventListener('scroll', () => {
+            let index = Math.round(container.scrollTop / window.innerHeight);
+            updateDots(index);
+        });
+
+        // Keyboard Nav
+        document.addEventListener('keydown', (e) => {
+            // Preventing default scroll to handle smooth scroll manually if needed
+            // But CSS scroll-snap usually handles this well.
+        });
+
+        // --- 4. Tab Switcher Logic ---
+        function switchTab(tabName) {
+            const smartContent = document.getElementById('content-smart');
+            const mandalContent = document.getElementById('content-mandal');
+            const btnSmart = document.getElementById('tab-btn-smart');
+            const btnMandal = document.getElementById('tab-btn-mandal');
+
+            if(tabName === 'smart') {
+                smartContent.classList.remove('hidden');
+                mandalContent.classList.add('hidden');
+                btnSmart.classList.add('border-secondary', 'text-secondary');
+                btnSmart.classList.remove('text-gray-400');
+                btnMandal.classList.remove('border-secondary', 'text-secondary');
+                btnMandal.classList.add('text-gray-400');
+            } else {
+                smartContent.classList.add('hidden');
+                mandalContent.classList.remove('hidden');
+                btnMandal.classList.add('border-secondary', 'text-secondary');
+                btnMandal.classList.remove('text-gray-400');
+                btnSmart.classList.remove('border-secondary', 'text-secondary');
+                btnSmart.classList.add('text-gray-400');
+            }
+        }
+
+        // --- 5. Finance Calculator Logic ---
+        function updateFinanceChart() {
+            const age = document.getElementById('ageInput').value;
+            let safe = Math.max(0, Math.min(100, parseInt(age))); // Cap 0-100
+            let invest = 100 - safe;
+
+            document.getElementById('investPercent').innerText = invest + "%";
+            document.getElementById('investBar').style.width = invest + "%";
+            document.getElementById('safePercent').innerText = safe + "%";
+            document.getElementById('safeBar').style.width = safe + "%";
+        }
+
+        // --- 6. Checklist Logic ---
+        function updateChecklist() {
+            const checks = document.querySelectorAll('.form-checkbox:checked').length;
+            const status = document.getElementById('checklist-status');
+            status.innerText = `${checks}/3 완료`;
+            if(checks === 3) status.classList.add('text-green-600', 'font-bold');
+            else status.classList.remove('text-green-600', 'font-bold');
+        }
+
+        // --- 7. Top Picks Filter Logic ---
+        function filterPicks(category) {
+            const cards = document.querySelectorAll('.pick-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.classList.contains(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // --- 8. Modal Logic ---
+        function toggleModal() {
+            const modal = document.getElementById('help-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // --- 9. Chart.js Initialization ---
+        let lifeChart, marketChart;
+
+        window.onload = function() {
+            // Chart 1: Life Matrix (Scatter)
+            const ctxLife = document.getElementById('chartLifeMatrix').getContext('2d');
+            lifeChart = new Chart(ctxLife, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: '삶의 영역',
+                        data: [
+                            {x: 90, y: 90, label: '커리어'},
+                            {x: 85, y: 40, label: '재무(긴급)'},
+                            {x: 60, y: 70, label: '건강'},
+                            {x: 40, y: 80, label: '가족'},
+                            {x: 30, y: 50, label: '취미'}
+                        ],
+                        backgroundColor: '#4f46e5',
+                        pointRadius: 10,
+                        pointHoverRadius: 12
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { min: 0, max: 100, title: {display: true, text: '중요도 (%)'} },
+                        y: { min: 0, max: 100, title: {display: true, text: '현재 만족도 (%)'} }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.label + ` (중요: ${context.raw.x}, 만족: ${context.raw.y})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Market Outlook (Bar)
+            const ctxMarket = document.getElementById('marketChart').getContext('2d');
+            marketChart = new Chart(ctxMarket, {
+                type: 'bar',
+                data: {
+                    labels: ['Bear Case', 'Base Case', 'Bull Case'],
+                    datasets: [{
+                        label: 'KOSPI 하단',
+                        data: [3010, 4980, 6170],
+                        backgroundColor: '#cbd5e1',
+                        borderWidth: 1
+                    }, {
+                        label: 'KOSPI 상단 (Potential)',
+                        data: [3280, 5410, 6720],
+                        backgroundColor: ['#9ca3af', '#4f46e5', '#ef4444'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', onClick: null }, // Interactive Legend can be custom
+                    },
+                    scales: {
+                        y: { beginAtZero: false, min: 2000 }
+                    }
+                }
+            });
+            
+            updateDots(0); // Init Nav
+        };
+
+        function updateChartsTheme(isDark) {
+            const color = isDark ? '#e5e7eb' : '#374151';
+            const gridColor = isDark ? '#374151' : '#e5e7eb';
+            
+            [lifeChart, marketChart].forEach(chart => {
+                if(!chart) return;
+                chart.options.scales.x.ticks.color = color;
+                chart.options.scales.y.ticks.color = color;
+                chart.options.scales.x.grid.color = gridColor;
+                chart.options.scales.y.grid.color = gridColor;
+                chart.update();
+            });
+        }
+
+    </script>
+</body>
+</html>
