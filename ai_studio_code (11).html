@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 전략적 인생 및 투자 로드맵 대시보드</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#10b981',
+                        darkBg: '#0f172a',
+                        darkCard: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { transition: background-color 0.3s, color 0.3s; }
+        .card-hover:hover { transform: translateY(-5px); transition: transform 0.3s ease; }
+        .chart-container { position: relative; height: 300px; width: 100%; }
+        /* Scrollbar Customization */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-darkBg dark:text-gray-200 font-sans antialiased">
+
+    <!-- App Layout -->
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 bg-white dark:bg-darkCard border-r border-gray-200 dark:border-gray-700 hidden md:flex flex-col z-20 shadow-lg">
+            <div class="p-6 flex items-center justify-center border-b border-gray-200 dark:border-gray-700">
+                <i class="fa-solid fa-compass text-3xl text-primary mr-3"></i>
+                <h1 class="text-xl font-bold tracking-tight">Life & Invest<br><span class="text-sm font-normal text-gray-500 dark:text-gray-400">2026 Roadmap</span></h1>
+            </div>
+            <nav class="flex-1 overflow-y-auto py-4">
+                <ul class="space-y-1 px-3">
+                    <li><a href="#section-life-vision" class="flex items-center p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 text-sm font-medium"><i class="fa-solid fa-user-astronaut w-6 text-center mr-2"></i> 인생 비전 설계</a></li>
+                    <li><a href="#section-goals" class="flex items-center p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 text-sm font-medium"><i class="fa-solid fa-bullseye w-6 text-center mr-2"></i> 목표 및 SMART</a></li>
+                    <li><a href="#section-finance-life" class="flex items-center p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 text-sm font-medium"><i class="fa-solid fa-wallet w-6 text-center mr-2"></i> 생애 재무 설계</a></li>
+                    <li class="my-2 border-t border-gray-200 dark:border-gray-700"></li>
+                    <li><a href="#section-market-outlook" class="flex items-center p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 text-sm font-medium"><i class="fa-solid fa-chart-line w-6 text-center mr-2"></i> 2026 시장 전망</a></li>
+                    <li><a href="#section-sector-strategy" class="flex items-center p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 text-sm font-medium"><i class="fa-solid fa-microchip w-6 text-center mr-2"></i> AI & 반도체 전략</a></li>
+                    <li><a href="#section-asset-allocation" class="flex items-center p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 text-sm font-medium"><i class="fa-solid fa-chart-pie w-6 text-center mr-2"></i> 자산 배분 & Top Picks</a></li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                <p class="text-xs text-center text-gray-400">Created for Report Dashboard</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto relative scroll-smooth">
+            
+            <!-- Header (Mobile Menu & Dark Mode) -->
+            <header class="bg-white/80 dark:bg-darkCard/80 backdrop-blur-md sticky top-0 z-30 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-between items-center">
+                <h2 class="text-lg font-semibold md:hidden">Roadmap 2026</h2>
+                <div class="hidden md:block text-sm text-gray-500 dark:text-gray-400">
+                    <i class="fa-regular fa-calendar mr-1"></i> 2025.12.24 작성
+                </div>
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-600 focus:outline-none transition-colors duration-300">
+                        <i id="theme-icon" class="fa-solid fa-moon text-gray-700 dark:text-yellow-300"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="p-6 max-w-7xl mx-auto space-y-12">
+
+                <!-- [주제 1] Intro Section -->
+                <section id="section-life-vision" class="animate-fade-in-up">
+                    <div class="mb-6">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Topic 1</span>
+                        <h2 class="text-3xl font-bold mt-2">전략적 인생 로드맵과 체계적 삶의 설계</h2>
+                        <p class="mt-2 text-gray-600 dark:text-gray-400">불확실한 미래를 주도적으로 개척하기 위한 나만의 인생 지도와 나침반</p>
+                    </div>
+
+                    <!-- 1. 자기탐색 & 가치 (Table & Visualization) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Chart Card: Life Balance Matrix -->
+                        <div class="bg-white dark:bg-darkCard rounded-xl shadow-lg p-6 card-hover">
+                            <h3 class="text-lg font-semibold mb-4 border-l-4 border-primary pl-3">삶의 영역 포트폴리오 (SLU Matrix)</h3>
+                            <div class="chart-container">
+                                <canvas id="lifeMatrixChart"></canvas>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-2 text-center">* 만족도는 낮으나 중요도가 높은 '긴급 영역' 식별 필요</p>
+                        </div>
+
+                        <!-- Info Card: Value Questions -->
+                        <div class="bg-white dark:bg-darkCard rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold mb-4 border-l-4 border-secondary pl-3">핵심 가치 탐색 질문</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">가치 영역</th>
+                                            <th scope="col" class="px-6 py-3">선택의 방향성 (예시)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition">
+                                            <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">삶의 방식</td>
+                                            <td class="px-6 py-4">자유롭고 도전적 vs 안정적이고 체계적</td>
+                                        </tr>
+                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition">
+                                            <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">대인 관계</td>
+                                            <td class="px-6 py-4">경쟁을 통한 성취 vs 협력과 조화</td>
+                                        </tr>
+                                        <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition">
+                                            <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">직업관</td>
+                                            <td class="px-6 py-4">개인 전문성 강화 vs 조직 리더십 발휘</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Detailed Text Accordion -->
+                            <details class="mt-4 group">
+                                <summary class="flex justify-between items-center font-medium cursor-pointer list-none text-primary hover:text-blue-700">
+                                    <span> 상세 보고서 보기 (자기 탐색 및 핵심 가치)</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                                </summary>
+                                <div class="text-gray-600 dark:text-gray-300 mt-3 text-sm leading-relaxed bg-gray-50 dark:bg-gray-700 p-4 rounded-md">
+                                    <p>로드맵 설계의 첫 단계는 MBTI나 성격유형검사 등을 활용하여 "나는 누구인가"를 정확히 아는 객관적 자기 탐색 과정입니다. 지난 5년간의 선택 패턴과 동기를 분석하여 자신의 흥미, 역량, 행동 특성을 구체적으로 정리하고 강점과 가능성을 파악해야 합니다. 핵심 가치는 모든 의사결정의 기준이 되며, 자유·안정·경쟁·협력 등 삶을 관통하는 3~5개의 핵심 가치를 추출해야 합니다. 자신의 삶에서 가장 중요한 원칙을 정의함으로써 위기 상황에서도 흔들리지 않는 가치 중심적 판단 체계를 구축할 수 있습니다. 가치 정립은 비전과 사명 선언문을 작성하는 기초가 되며, 장기적인 동기부여를 지속 가능하게 만드는 핵심 동력입니다. 자기 이해는 로드맵의 기초 공사와 같습니다. 본인이 진정으로 원하는 것이 무엇인지 모른 채 세운 계획은 오래 지속될 수 없기 때문입니다. 따라서 충분한 시간을 들여 자신의 내면을 들여다보고 우선순위를 결정해야 합니다.</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Goals & SMART (Interactive Tabs) -->
+                <section id="section-goals" class="scroll-mt-20">
+                    <h3 class="text-2xl font-bold mb-4">SMART 목표 설정 및 만다라트</h3>
+                    
+                    <div class="bg-white dark:bg-darkCard rounded-xl shadow-lg p-6">
+                        <!-- Tab Headers -->
+                        <div class="flex border-b border-gray-200 dark:border-gray-700 mb-4">
+                            <button class="tab-btn px-4 py-2 text-primary border-b-2 border-primary font-medium" onclick="openTab(event, 'SMART')">SMART 원칙</button>
+                            <button class="tab-btn px-4 py-2 text-gray-500 hover:text-primary font-medium" onclick="openTab(event, 'MandalArt')">만다라트 기법</button>
+                        </div>
+
+                        <!-- Tab Content: SMART -->
+                        <div id="SMART" class="tab-content block">
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+                                <div class="bg-blue-50 dark:bg-gray-800 p-4 rounded text-center card-hover">
+                                    <div class="text-2xl font-bold text-blue-600 mb-1">S</div>
+                                    <div class="font-bold text-sm">Specific</div>
+                                    <div class="text-xs text-gray-500">구체적 행동</div>
+                                </div>
+                                <div class="bg-green-50 dark:bg-gray-800 p-4 rounded text-center card-hover">
+                                    <div class="text-2xl font-bold text-green-600 mb-1">M</div>
+                                    <div class="font-bold text-sm">Measurable</div>
+                                    <div class="text-xs text-gray-500">측정 가능</div>
+                                </div>
+                                <div class="bg-yellow-50 dark:bg-gray-800 p-4 rounded text-center card-hover">
+                                    <div class="text-2xl font-bold text-yellow-600 mb-1">A</div>
+                                    <div class="font-bold text-sm">Achievable</div>
+                                    <div class="text-xs text-gray-500">달성 가능</div>
+                                </div>
+                                <div class="bg-purple-50 dark:bg-gray-800 p-4 rounded text-center card-hover">
+                                    <div class="text-2xl font-bold text-purple-600 mb-1">R</div>
+                                    <div class="font-bold text-sm">Relevant</div>
+                                    <div class="text-xs text-gray-500">관련성</div>
+                                </div>
+                                <div class="bg-red-50 dark:bg-gray-800 p-4 rounded text-center card-hover">
+                                    <div class="text-2xl font-bold text-red-600 mb-1">T</div>
+                                    <div class="font-bold text-sm">Time-bound</div>
+                                    <div class="text-xs text-gray-500">기한 설정</div>
+                                </div>
+                            </div>
+                            <details class="mt-4">
+                                <summary class="cursor-pointer text-sm text-primary hover:underline">상세 설명 보기 (SMART 원칙)</summary>
+                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    목표는 기간에 따라 장기(10년 이상), 중기(3~5년), 단기(1년 이하)로 구분하여 계층적 구조로 설정해야 합니다. 모든 목표는 SMART 원칙에 따라 정교하게 설계되어야 실천력이 생깁니다. '성공하고 싶다'는 막연한 목표 대신 '10년 내 연봉 1억 달성'과 같이 수치화된 목표를 세워야 합니다. 목표 간의 인과관계를 설정하여 단기 목표의 달성이 자연스럽게 중·장기 비전으로 이어지도록 정렬하는 작업이 필수적입니다. 너무 먼 미래만 바라보면 현재가 지치고, 눈앞의 일에만 매몰되면 방향을 잃기 쉽기 때문에 SMART 원칙은 이러한 불균형을 해소하는 열쇠가 됩니다.
+                                </p>
+                            </details>
+                        </div>
+
+                        <!-- Tab Content: MandalArt -->
+                        <div id="MandalArt" class="tab-content hidden">
+                            <div class="grid grid-cols-3 gap-2 max-w-md mx-auto aspect-square">
+                                <!-- Visual Representation of 9 blocks -->
+                                <div class="bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-400">세부목표 1</div>
+                                <div class="bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-400">세부목표 2</div>
+                                <div class="bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-400">세부목표 3</div>
+                                <div class="bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-400">세부목표 4</div>
+                                <div class="bg-primary text-white font-bold flex items-center justify-center text-sm shadow-lg transform scale-105">핵심목표</div>
+                                <div class="bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-400">세부목표 5</div>
+                                <div class="bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-400">세부목표 6</div>
+                                <div class="bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-400">세부목표 7</div>
+                                <div class="bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-400">세부목표 8</div>
+                            </div>
+                            <p class="mt-4 text-sm text-center text-gray-600 dark:text-gray-300">
+                                만다라트는 핵심 목표 1개를 중심으로 8개의 세부 목표와 64개의 실행 계획을 확장해 나가는 강력한 시각화 도구입니다. 오타니 쇼헤이의 성공 비결로도 유명합니다.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Financial Plan (Chart: Asset Allocation) -->
+                <section id="section-finance-life" class="scroll-mt-20">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Chart -->
+                        <div class="lg:col-span-1 bg-white dark:bg-darkCard rounded-xl shadow-lg p-6 flex flex-col items-center">
+                            <h3 class="text-lg font-semibold mb-2">사회초년생 재무 비율 가이드</h3>
+                            <div class="relative w-48 h-48">
+                                <canvas id="financePieChart"></canvas>
+                            </div>
+                            <p class="mt-4 text-xs text-center text-gray-500">100-나이 법칙: 나이만큼 안전자산, 나머지는 투자자산 배분</p>
+                        </div>
+                        <!-- Checklists & Info -->
+                        <div class="lg:col-span-2 bg-white dark:bg-darkCard rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold mb-4">통장 쪼개기 및 위험 관리 체크리스트</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <input type="checkbox" class="mt-1 mr-2 accent-primary" checked disabled>
+                                    <span class="text-sm"><strong>급여 통장:</strong> 수입의 통로, 고정 지출 자동이체 설정</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <input type="checkbox" class="mt-1 mr-2 accent-primary" checked disabled>
+                                    <span class="text-sm"><strong>파킹 통장(CMA):</strong> 비상금(생활비 3~6개월치) 예치</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <input type="checkbox" class="mt-1 mr-2 accent-primary">
+                                    <span class="text-sm"><strong>연금 저축:</strong> 소득의 10% 할당 (IRP/연금저축펀드 세액공제)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <input type="checkbox" class="mt-1 mr-2 accent-primary">
+                                    <span class="text-sm"><strong>보장성 보험:</strong> 소득 5~10% 이내 실손 위주 가입</span>
+                                </li>
+                            </ul>
+                            <div class="mt-6 p-4 bg-orange-50 dark:bg-gray-800 rounded border-l-4 border-orange-400 text-sm">
+                                <strong>💡 현금흐름 최적화 팁:</strong> 수입을 4개 이상의 통장으로 나누어 관리하여 돈의 흐름을 통제하세요. 연간 총소득의 10%는 비정기 지출(휴가, 명절)을 위한 '예비비'로 별도 관리하면 고정 예산이 무너지는 것을 막을 수 있습니다.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-gray-300 dark:border-gray-600">
+
+                <!-- [주제 2] Market Outlook Intro -->
+                <section id="section-market-outlook" class="scroll-mt-20">
+                    <div class="mb-6">
+                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Topic 2</span>
+                        <h2 class="text-3xl font-bold mt-2">2026년 주식시장 전망과 투자 전략</h2>
+                        <p class="mt-2 text-gray-600 dark:text-gray-400">준골디락스(Quasi-Goldilocks) 환경과 AI 슈퍼 사이클의 도래</p>
+                    </div>
+
+                    <!-- KOSPI Chart -->
+                    <div class="bg-white dark:bg-darkCard rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold border-l-4 border-red-500 pl-3">2026 KOSPI 시나리오별 전망</h3>
+                            <span class="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">Base Case: 4,980 ~ 5,410pt</span>
+                        </div>
+                        <div class="chart-container" style="height: 350px;">
+                            <canvas id="kospiChart"></canvas>
+                        </div>
+                        <!-- Market Outlook Detail Text -->
+                        <details class="mt-6">
+                            <summary class="flex justify-between items-center font-medium cursor-pointer list-none text-red-500 hover:text-red-700">
+                                <span> 상세 보고서 보기 (시장 전망 및 매크로 환경)</span>
+                                <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down"></i></span>
+                            </summary>
+                            <div class="text-gray-600 dark:text-gray-300 mt-3 text-sm leading-relaxed bg-gray-50 dark:bg-gray-700 p-4 rounded-md">
+                                <p>2026년 KOSPI 시장은 지수 3,300~4,000Pt 밴드 내에서 중립 이상의 우호적인 주가 흐름을 전개할 것으로 예상됩니다. 베이스 시나리오 하에서 적정 KOSPI는 이익 모멘텀 가속화에 힘입어 최대 5,400pt까지 상승할 잠재력을 보유하고 있습니다. 이는 AI 혁명과 주요국의 중상주의적 재정 부양, 연준의 '슬로우 이징 사이클(Slow Easing Cycle)'이 결합된 '준골디락스' 환경 덕분입니다. 글로벌 경제는 잠재성장률 이상의 성장세를 지속하며, 물가는 하향 안정화되어 위험 자산 선호 심리를 지지할 것입니다. 특히 '코리아 디스카운트'를 넘어 '코리아 프리미엄'으로의 진입을 시도하는 해가 될 것이며, 정부의 밸류업 프로그램과 상법 개정 등의 거버넌스 이슈가 시장의 핵심 동력이 될 전망입니다.</p>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+
+                <!-- 5. AI & Sector Strategy (Charts) -->
+                <section id="section-sector-strategy" class="scroll-mt-20">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- AI Capex Chart -->
+                        <div class="bg-white dark:bg-darkCard rounded-xl shadow-lg p-6 card-hover">
+                            <h3 class="text-lg font-semibold mb-4">글로벌 Big Tech AI Capex 전망</h3>
+                            <div class="chart-container">
+                                <canvas id="aiCapexChart"></canvas>
+                            </div>
+                            <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                                * 2026년 AI 투자는 효율화 단계 진입하나 규모는 4,676억 달러로 폭증 예상.
+                            </p>
+                        </div>
+
+                        <!-- Top Picks Filterable List -->
+                        <div class="bg-white dark:bg-darkCard rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold mb-4">2026 유망 업종 및 Top Picks</h3>
+                            
+                            <!-- Filters -->
+                            <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
+                                <button onclick="filterPicks('all')" class="px-3 py-1 text-xs rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 focus:bg-primary focus:text-white transition">All</button>
+                                <button onclick="filterPicks('semi')" class="px-3 py-1 text-xs rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 focus:bg-primary focus:text-white transition">반도체</button>
+                                <button onclick="filterPicks('heavy')" class="px-3 py-1 text-xs rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 focus:bg-primary focus:text-white transition">중공업/전력</button>
+                                <button onclick="filterPicks('bio')" class="px-3 py-1 text-xs rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 focus:bg-primary focus:text-white transition">바이오</button>
+                            </div>
+
+                            <!-- List -->
+                            <div class="space-y-3 h-64 overflow-y-auto pr-2" id="picks-container">
+                                <div class="p-3 bg-blue-50 dark:bg-gray-800 rounded border-l-4 border-blue-500 pick-item semi">
+                                    <div class="flex justify-between"><strong class="text-sm">삼성전자, SK하이닉스</strong> <span class="text-xs bg-blue-200 text-blue-800 px-1 rounded">반도체</span></div>
+                                    <p class="text-xs text-gray-500 mt-1">HBM 시장 선점 및 공급자 우위 가격 주도권</p>
+                                </div>
+                                <div class="p-3 bg-yellow-50 dark:bg-gray-800 rounded border-l-4 border-yellow-500 pick-item heavy">
+                                    <div class="flex justify-between"><strong class="text-sm">한화에어로, HD한국조선</strong> <span class="text-xs bg-yellow-200 text-yellow-800 px-1 rounded">중공업</span></div>
+                                    <p class="text-xs text-gray-500 mt-1">글로벌 수주 잔고 급증 및 미 해군 협력 모멘텀</p>
+                                </div>
+                                <div class="p-3 bg-green-50 dark:bg-gray-800 rounded border-l-4 border-green-500 pick-item bio">
+                                    <div class="flex justify-between"><strong class="text-sm">삼성바이오, 리가켐바이오</strong> <span class="text-xs bg-green-200 text-green-800 px-1 rounded">바이오</span></div>
+                                    <p class="text-xs text-gray-500 mt-1">CDMO 경쟁력 및 금리 인하 수혜, 신약 기대</p>
+                                </div>
+                                <div class="p-3 bg-yellow-50 dark:bg-gray-800 rounded border-l-4 border-yellow-500 pick-item heavy">
+                                    <div class="flex justify-between"><strong class="text-sm">효성중공업, LS</strong> <span class="text-xs bg-yellow-200 text-yellow-800 px-1 rounded">전력/인프라</span></div>
+                                    <p class="text-xs text-gray-500 mt-1">미국 노후 전력망 교체 및 데이터센터 증설 수혜</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Asset Allocation (Radar & Table) -->
+                <section id="section-asset-allocation" class="scroll-mt-20">
+                    <h3 class="text-2xl font-bold mb-4">글로벌 자산 배분 전략</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Radar Chart -->
+                        <div class="lg:col-span-1 bg-white dark:bg-darkCard rounded-xl shadow-lg p-6">
+                            <h4 class="text-sm font-bold text-center mb-2">2026 자산군별 선호도</h4>
+                            <div class="chart-container">
+                                <canvas id="assetRadarChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Dividend Table -->
+                        <div class="lg:col-span-2 bg-white dark:bg-darkCard rounded-xl shadow-lg p-6">
+                            <h4 class="text-lg font-semibold mb-3">배당 및 인컴 전략 (ETF)</h4>
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th class="px-4 py-2">티커</th>
+                                        <th class="px-4 py-2">특징</th>
+                                        <th class="px-4 py-2">예상 수익률</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition cursor-pointer">
+                                        <td class="px-4 py-3 font-bold">SCHD</td>
+                                        <td class="px-4 py-3">배당 성장주, 장기 보유 적합</td>
+                                        <td class="px-4 py-3 text-blue-600 font-bold">3.5% + Growth</td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 transition cursor-pointer">
+                                        <td class="px-4 py-3 font-bold">JEPI</td>
+                                        <td class="px-4 py-3">커버드콜, 월배당 고수익</td>
+                                        <td class="px-4 py-3 text-blue-600 font-bold">7~10%</td>
+                                    </tr>
+                                    <tr class="bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-gray-600 transition cursor-pointer">
+                                        <td class="px-4 py-3 font-bold">Realty Income</td>
+                                        <td class="px-4 py-3">부동산 월세 배당</td>
+                                        <td class="px-4 py-3 text-blue-600 font-bold">4.5%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="mt-4 text-sm text-gray-600 dark:text-gray-400 p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                <p><strong>전략 코멘트:</strong> 금리 인하 국면에서는 현금 흐름 가치가 높아집니다. 성장주(한국/미국 IT) 비중을 높이되, 변동성 방어를 위해 SCHD나 JEPI 같은 배당 자산을 '브레이크'로 활용하여 포트폴리오의 안정성을 확보하세요.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <footer class="mt-12 text-center text-gray-500 text-xs py-6 border-t border-gray-200 dark:border-gray-700">
+                    <p>본 대시보드는 2026년 전망을 기초로 작성되었으며, 실제 투자 책임은 본인에게 있습니다.</p>
+                    <p class="mt-1">&copy; 2025 Strategic Life & Investment Roadmap Dashboard</p>
+                </footer>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // 1. Dark Mode Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                themeIcon.classList.remove('text-yellow-300');
+                themeIcon.classList.add('text-gray-700');
+            } else {
+                html.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeIcon.classList.add('text-yellow-300');
+                themeIcon.classList.remove('text-gray-700');
+            }
+        });
+
+        // 2. Tab Functionality
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.add("hidden");
+                tabcontent[i].classList.remove("block");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("text-primary", "border-b-2", "border-primary");
+                tablinks[i].classList.add("text-gray-500");
+            }
+            document.getElementById(tabName).classList.remove("hidden");
+            document.getElementById(tabName).classList.add("block");
+            evt.currentTarget.classList.add("text-primary", "border-b-2", "border-primary");
+            evt.currentTarget.classList.remove("text-gray-500");
+        }
+
+        // 3. Filter Top Picks
+        function filterPicks(category) {
+            const items = document.querySelectorAll('.pick-item');
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // 4. Chart.js Configurations
+        
+        // Chart 1: Life Balance Matrix (Scatter)
+        const ctxLife = document.getElementById('lifeMatrixChart').getContext('2d');
+        new Chart(ctxLife, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: '삶의 영역 (SLU)',
+                    data: [
+                        {x: 80, y: 90, label: '직업/커리어'}, // High Imp, High Sat
+                        {x: 90, y: 40, label: '재정/자산 (긴급)'}, // High Imp, Low Sat
+                        {x: 60, y: 70, label: '관계/사회'},
+                        {x: 50, y: 80, label: '건강'},
+                        {x: 30, y: 60, label: '취미'}
+                    ],
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    pointRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { 
+                        title: { display: true, text: '중요도 (%)' },
+                        min: 0, max: 100 
+                    },
+                    y: { 
+                        title: { display: true, text: '만족도 (%)' },
+                        min: 0, max: 100 
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.label + ': (중요 ' + context.raw.x + ', 만족 ' + context.raw.y + ')';
+                            }
+                        }
+                    },
+                    annotation: {
+                        // Advanced feature placeholder
+                    }
+                }
+            }
+        });
+
+        // Chart 2: Financial Pie Chart
+        const ctxPie = document.getElementById('financePieChart').getContext('2d');
+        new Chart(ctxPie, {
+            type: 'doughnut',
+            data: {
+                labels: ['저축/투자 (30%↑)', '노후준비 (10%)', '고정지출/대출 (40%)', '유동성/비상금 (20%)'],
+                datasets: [{
+                    data: [30, 10, 40, 20],
+                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#64748b'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Chart 3: KOSPI Bar Chart
+        const ctxKospi = document.getElementById('kospiChart').getContext('2d');
+        new Chart(ctxKospi, {
+            type: 'bar',
+            data: {
+                labels: ['Worst Case', 'Base Case (중립)', 'Best Case (강세)'],
+                datasets: [{
+                    label: '지수 하단',
+                    data: [3010, 4980, 6170],
+                    backgroundColor: 'rgba(200, 200, 200, 0.5)',
+                    stack: 'Stack 0',
+                }, {
+                    label: '지수 상단 (상승여력)',
+                    data: [270, 430, 550], // Difference for visual stacking
+                    backgroundColor: ['#94a3b8', '#3b82f6', '#ef4444'],
+                    stack: 'Stack 0',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                // Simplified logic for demo
+                                const value = context.raw;
+                                return 'Target: ' + (context.chart.data.datasets[0].data[context.dataIndex] + context.chart.data.datasets[1].data[context.dataIndex]) + ' pt';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: false, min: 2000 }
+                }
+            }
+        });
+
+        // Chart 4: AI Capex Bar Chart
+        const ctxCapex = document.getElementById('aiCapexChart').getContext('2d');
+        new Chart(ctxCapex, {
+            type: 'bar',
+            data: {
+                labels: ['2024 (실적)', '2025 (예상)', '2026 (예상)'],
+                datasets: [{
+                    label: 'Big 5 Capex ($ Billion)',
+                    data: [239.1, 387.6, 467.6],
+                    backgroundColor: ['#cbd5e1', '#60a5fa', '#2563eb'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Chart 5: Asset Allocation Radar
+        const ctxRadar = document.getElementById('assetRadarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['글로벌 주식', '신흥국 주식(한국)', '선진국 채권', '대체투자', '현금', '원자재'],
+                datasets: [{
+                    label: '2026 선호도',
+                    data: [9, 10, 5, 7, 3, 4], // 1-10 Scale
+                    fill: true,
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    borderColor: 'rgb(16, 185, 129)',
+                    pointBackgroundColor: 'rgb(16, 185, 129)',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { display: false },
+                        suggestedMin: 0,
+                        suggestedMax: 10
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
